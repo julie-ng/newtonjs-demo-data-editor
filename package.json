@@ -1,0 +1,30 @@
+{
+  "name": "newtonjs-server-dummy",
+  "version": "0.0.0",
+  "author": "Julie Ng <me@julie.io>",
+  "license": "MIT",
+  "description": "Dummy network data source for demos",
+  "scripts": {
+    "start": "node app/app.js",
+    "dev": "nodemon -w app --exec 'npm start'",
+    "lint": "eslint .",
+    "release": "standard-version"
+  },
+  "dependencies": {
+    "body-parser": "^1.18.3",
+    "express": "^4.16.4",
+    "express-handlebars": "^3.0.2",
+    "hbs": "^4.0.4",
+    "helmet": "^3.16.0",
+    "morgan": "^1.9.1"
+  },
+  "devDependencies": {
+    "eslint": "^3.19.0",
+    "nodemon": "^1.18.11",
+    "standard-version": "^4.4.0"
+  },
+  "engines": {
+    "node": "^10.12.0",
+    "npm": "^6.1.0"
+  }
+}
