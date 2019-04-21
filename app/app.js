@@ -57,7 +57,7 @@ io.on('connection', function (socket) {
 		// io.emit('chat message', msg);
 		console.log('Data was updated:')
 		console.log(data)
-  });
+  })
 })
 
 http.listen(3000, function () {
