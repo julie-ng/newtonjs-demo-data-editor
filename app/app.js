@@ -7,14 +7,21 @@ const express = require('express')
 const helmet = require('helmet')
 const logger = require('morgan')
 
-const port = process.env.PORT || 3000
 let app = express()
+const http = require('http').Server(app)
+const io = require('socket.io')(http)
+
+const port = process.env.PORT || 3000
+
+// --- Middleware and Views ---
 
 app.use(helmet())
 app.use(logger('dev'))
 app.set('views', path.join(__dirname, '/views'))
 app.set('view engine', 'hbs')
 app.set('view options', { layout: 'layout' })
+
+// --- Routes ---
 
 app.get('/', (req, res) => {
 	res.render('home', { title: 'Newton.js Dummy Server', body: 'Hello World' })
@@ -24,6 +31,12 @@ app.use((req, res, next) => {
   res.status(404).send('Oops - page not found.')
 })
 
-app.listen(port, () => {
-	console.log(`Express listening on port ${port}!`)
+// --- Connect ---
+
+io.on('connection', function (socket) {
+  console.log('An user connected')
+})
+
+http.listen(3000, function () {
+  console.log(`App listening on ${port}!`)
 })
