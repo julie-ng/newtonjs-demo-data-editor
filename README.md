@@ -1,6 +1,6 @@
 # Newton.js demo - data server
 
-This is a fake server used to mimic real time data for [Newton.js network graph](https://github.com/julie-ng/newtonjs-graph). 
+This is a fake server used to mimic real time data for [Newton.js network graph](https://github.com/julie-ng/newtonjs-graph). This server uses a [pre-built Ace code editor](https://github.com/ajaxorg/ace-builds).
 
 ![Editor Preview](./images/editor-preview.png)
 
