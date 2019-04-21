@@ -1,0 +1,107 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+  <title>Newton.js Dummy Data Editor</title>
+  <style type="text/css" media="screen">
+	body {
+		overflow: hidden;
+	}
+
+	#js-editor {
+		margin: 0;
+		position: absolute;
+		top: 60px;
+		bottom: 0;
+		left: 0;
+		right: 0;
+		overflow: scroll;
+	}
+
+	header {
+		margin: 0;
+		position: absolute;
+		left: 0;
+		top: 0;
+		right: 0;
+		padding: 0 20px;
+		background: #101f27;
+		color: #fff;
+		font-family: 'Roboto', Helvetica, sans-serif;
+		height: 60px;
+
+	}
+
+	h1 {
+		display: inline-block;
+		margin: 0;
+		font-size: 24px;
+		line-height: 60px;
+		font-weight: 400;
+		vertical-align: middle;
+		float: left
+	}
+
+	header div {
+		line-height: 60px;
+		text-align: right;
+	}
+
+	button {
+		color: #fff;
+    background-color: #28a745;
+    border-color: #28a745;
+		cursor: pointer;
+		display: inline-block;
+    font-weight: 400;
+    text-align: center;
+    vertical-align: middle;
+    border: 1px solid transparent;
+    padding: .275rem 1rem;
+    font-size: 1rem;
+    line-height: 1.5;
+    border-radius: .25rem;
+	}
+
+	button:focus {
+		outline: none;
+	}
+
+	button:active, button:hover {
+		background-color: #2dbc4e;
+	}
+  </style>
+</head>
+<body>
+
+<header>
+	<h1>Newton.js Demo - Dummy Data</h1>
+	<div>
+		<button type="button" id="js-btn">Save Data</button>
+	</div>
+</header>
+
+<pre id="js-editor">
+{{{ data }}}
+</pre>
+
+<script src="/static/vendor/ace/ace.js" type="text/javascript" charset="utf-8"></script>
+<script>
+	let editor = ace.edit("js-editor")
+	editor.setTheme("ace/theme/chrome")
+	editor.session.setMode("ace/mode/json")
+	editor.setShowPrintMargin(false)
+	editor.session.setTabSize(2)
+	editor.session.setUseSoftTabs(true)
+
+	let btn = document.getElementById('js-btn')
+
+	btn.addEventListener('mousedown', function () {
+		let contents = editor.getSession().getValue()
+		console.log(JSON.parse(contents))
+	})
+</script>
+
+</body>
+</html>

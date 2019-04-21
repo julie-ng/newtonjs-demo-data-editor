@@ -22,6 +22,7 @@ app.use(logger('dev'))
 app.set('views', path.join(__dirname, '/views'))
 app.set('view engine', 'hbs')
 app.set('view options', { layout: 'layout' })
+app.use('/static', express.static(path.join(__dirname, '/static')))
 
 // --- Routes ---
 
@@ -31,6 +32,13 @@ app.get('/', (req, res) => {
 
 app.get('/data', (req, res) => {
 	res.json(demoData)
+})
+
+app.get('/editor', (req, res) => {
+	res.render('editor', {
+		data: JSON.stringify(demoData, null, '\t'),
+		layout: false
+	})
 })
 
 app.use((req, res, next) => {
