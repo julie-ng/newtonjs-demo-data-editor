@@ -26,15 +26,15 @@ app.use('/static', express.static(path.join(__dirname, '/static')))
 
 // --- Routes ---
 
+// app.get('/', (req, res) => {
+// 	res.render('home', { title: 'Newton.js Dummy Server', body: 'Hello World' })
+// })
+
+// app.get('/data', (req, res) => {
+// 	res.json(demoData)
+// })
+
 app.get('/', (req, res) => {
-	res.render('home', { title: 'Newton.js Dummy Server', body: 'Hello World' })
-})
-
-app.get('/data', (req, res) => {
-	res.json(demoData)
-})
-
-app.get('/editor', (req, res) => {
 	res.render('editor', {
 		data: JSON.stringify(demoData, null, '\t'),
 		layout: false
@@ -42,7 +42,11 @@ app.get('/editor', (req, res) => {
 })
 
 app.use((req, res, next) => {
-  res.status(404).send('Oops - page not found.')
+	res.status(404)
+		.render('home', {
+			title: 'Oops - page not found',
+			body: 'Go to the <a href="/">dummy data editor &rarr;</a>'
+		})
 })
 
 // --- Connect ---
