@@ -13,6 +13,8 @@ const io = require('socket.io')(http)
 
 const port = process.env.PORT || 3000
 
+const demoData = require('./data/1-default')
+
 // --- Middleware and Views ---
 
 app.use(helmet())
@@ -25,6 +27,10 @@ app.set('view options', { layout: 'layout' })
 
 app.get('/', (req, res) => {
 	res.render('home', { title: 'Newton.js Dummy Server', body: 'Hello World' })
+})
+
+app.get('/data', (req, res) => {
+	res.json(demoData)
 })
 
 app.use((req, res, next) => {
