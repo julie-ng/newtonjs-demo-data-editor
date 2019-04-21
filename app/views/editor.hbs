@@ -86,8 +86,10 @@
 {{{ data }}}
 </pre>
 
+<script src="/socket.io/socket.io.js"></script>
 <script src="/static/vendor/ace/ace.js" type="text/javascript" charset="utf-8"></script>
 <script>
+	let socket = io()
 	let editor = ace.edit("js-editor")
 	editor.setTheme("ace/theme/chrome")
 	editor.session.setMode("ace/mode/json")
@@ -98,8 +100,9 @@
 	let btn = document.getElementById('js-btn')
 
 	btn.addEventListener('mousedown', function () {
-		let contents = editor.getSession().getValue()
-		console.log(JSON.parse(contents))
+		let data = JSON.parse(editor.getSession().getValue())
+		socket.emit('network:data', data)
+		console.log(data)
 	})
 </script>
 

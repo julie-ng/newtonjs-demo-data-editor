@@ -48,7 +48,12 @@ app.use((req, res, next) => {
 // --- Connect ---
 
 io.on('connection', function (socket) {
-  console.log('An user connected')
+	console.log('socket.io: user connected')
+	socket.on('network:data', function (data) {
+		// io.emit('chat message', msg);
+		console.log('Data was updated:')
+		console.log(data)
+  });
 })
 
 http.listen(3000, function () {
