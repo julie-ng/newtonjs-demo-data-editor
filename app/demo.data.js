@@ -1,3 +1,5 @@
+'use strict'
+
 const nodes = [
 	{
 		id: "1",
