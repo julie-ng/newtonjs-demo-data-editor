@@ -54,10 +54,14 @@ app.use((req, res, next) => {
 io.on('connection', function (socket) {
 	console.log('socket.io: user connected')
 	socket.on('network:data', function (data) {
-		// io.emit('chat message', msg);
 		console.log('Data was updated:')
 		console.log(data)
-  })
+		io.emit('network:data', data)
+	})
+
+	socket.on('join', (msg) => {
+		console.log(msg)
+	})
 })
 
 http.listen(3000, function () {
