@@ -13,7 +13,7 @@ const io = require('socket.io')(http)
 
 const port = process.env.PORT || 3000
 
-const demoData = require('./data/1-default')
+const demoData = require('./demo.data')
 
 // --- Middleware and Views ---
 

@@ -1,4 +1,4 @@
-const elements = [
+const nodes = [
 	{
 		id: "1",
 		status: "up",
@@ -42,7 +42,7 @@ const elements = [
 ]
 
 // links by reference
-const linksMap = [
+const links = [
 	{ source: '1', target: '2' },
 	{ source: '2', target: '3' },
 	{ source: '2', target: '4' },
@@ -54,6 +54,6 @@ const linksMap = [
 ]
 
 module.exports = {
-	nodes: elements,
-	linksMap: linksMap
+	nodes: nodes,
+	links: links
 }
