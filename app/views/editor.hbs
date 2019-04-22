@@ -93,19 +93,28 @@
 <script>
 	let socket = io()
 	let editor = ace.edit("js-editor")
+	let btn = document.getElementById('js-btn')
+	btn.addEventListener('mousedown', pushData)
+
 	editor.setTheme("ace/theme/chrome")
 	editor.session.setMode("ace/mode/json")
 	editor.setShowPrintMargin(false)
 	editor.session.setTabSize(2)
 	editor.session.setUseSoftTabs(true)
+	editor.commands.addCommand({
+    name: 'save',
+    bindKey: {
+			win: 'Ctrl-S',
+			mac: 'Cmd-S'
+		},
+    exec: pushData
+	})
 
-	let btn = document.getElementById('js-btn')
-
-	btn.addEventListener('mousedown', function () {
+	function pushData () {
 		let data = JSON.parse(editor.getSession().getValue())
 		socket.emit('network:data', data)
 		console.log(data)
-	})
+	}
 </script>
 
 </body>
