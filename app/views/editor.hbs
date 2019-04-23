@@ -101,6 +101,8 @@
 	editor.setShowPrintMargin(false)
 	editor.session.setTabSize(2)
 	editor.session.setUseSoftTabs(true)
+
+	// Save Shortcut
 	editor.commands.addCommand({
     name: 'save',
     bindKey: {
@@ -108,6 +110,23 @@
 			mac: 'Cmd-S'
 		},
     exec: pushData
+	})
+
+	// Sublime Shorcut
+	editor.commands.addCommand({
+    name: 'Find expand cursors',
+    bindKey: { win: 'Ctrl-d', mac: 'Cmd-d' },
+    exec: function (editor) { editor.selectMore(1, false, true) },
+    scrollIntoView: 'animate',
+		readOnly: true
+	})
+
+	// Sublime Shorcut
+	editor.commands.addCommand({
+    name: 'splitIntoLines',
+    bindKey: { win: 'ctrl-shift-l', mac: 'cmd-shift-l' },
+    exec: function (editor) { editor.multiSelect.splitIntoLines() },
+		readOnly: true
 	})
 
 	function pushData () {
