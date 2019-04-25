@@ -7,7 +7,7 @@ WORKDIR /workspace
 COPY ["package.json", "package-lock.json", "./"]
 RUN npm install --production
 
-COPY ["demo/", "/workspace/demo/"]
+COPY ["app/", "/workspace/app/"]
 
 EXPOSE ${PORT:-80}
 CMD ["npm", "start"]
