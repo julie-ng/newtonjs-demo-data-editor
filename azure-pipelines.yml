@@ -7,7 +7,7 @@ variables:
   azureContainerRegistry: newton.azurecr.io
   registryName: $(azureContainerRegistry)/$(Build.Repository.Name)
   imageTag: $(registryName):$(Build.BuildId)
-  appName: newton-demo-data-server
+  appName: newton-demo-data-editor
 
 pool:
   vmImage: 'ubuntu-latest'
