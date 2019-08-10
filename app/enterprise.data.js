@@ -1,3 +1,5 @@
+'use strict'
+
 const nodes = [
 	{ status: "up", id:"web-frontend", label: "Web Frontend" },
 	{ status: "up", id:"mobile-frontend", label: "Mobile Frontend" },
