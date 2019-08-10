@@ -9,7 +9,8 @@
     "start": "node app/app.js",
     "dev": "nodemon -w app --exec 'npm start'",
     "lint": "eslint .",
-    "release": "standard-version"
+    "release": "standard-version",
+    "preflight": "npm audit && npm run lint"
   },
   "dependencies": {
     "body-parser": "^1.19.0",
