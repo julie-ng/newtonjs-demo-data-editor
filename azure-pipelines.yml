@@ -123,6 +123,6 @@ stages:
       displayName: Deploy container as Azure Web App
       condition: and(succeeded(), eq(variables['Build.SourceBranch'], 'refs/heads/master')) # (master branch and succesful builds only)
       inputs:
-        appName: $(app-name)
+        appName: $(pipeline-app-name) # var set in pipeline
         azureSubscription: $(newton-service-connection)
         imageName: $(snapshot-tag)
