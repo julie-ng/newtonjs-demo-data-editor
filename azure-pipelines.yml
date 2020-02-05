@@ -104,21 +104,10 @@ stages:
       - script: docker logout $(newton-registry)
         displayName: 'Docker: logout ACR'
 
-
-
-# Deploy to App Services
-# ----------------------
-
-- stage: DeployImage
-  displayName: Deploy
-  jobs:
-  - job: deploy_image
-    displayName: 'Deploy Image (master)'
-    steps:
-    - task: AzureWebAppContainer@1
-      displayName: Deploy container as Azure Web App
-      condition: and(succeeded(), eq(variables['Build.SourceBranch'], 'refs/heads/master')) # (master branch and succesful builds only)
-      inputs:
-        appName: $(pipeline-app-name) # var set in pipeline
-        azureSubscription: $(newton-service-connection)
-        imageName: $(snapshot-tag)
+      - task: AzureWebAppContainer@1
+        displayName: 'App Service: deploy container'
+        condition: and(succeeded(), eq(variables['Build.SourceBranch'], 'refs/heads/master')) # (master branch and succesful builds only)
+        inputs:
+          appName: $(pipeline-app-name) # var set in pipeline
+          azureSubscription: $(newton-service-connection)
+          imageName: $(snapshot-tag)-$(build-sha)
