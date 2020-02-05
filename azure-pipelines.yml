@@ -72,21 +72,21 @@ stages:
 # Docker: Build and Push
 # ----------------------
 
-- stage: BuildImage
-  displayName: 'Build (Docker)'
+- stage: BuildAndDeploy
+  displayName: 'Build and Deploy'
   jobs:
-    - job: build_and_push_image
-      displayName: Build and Push Image
+    - job: build_and_deploy
+      displayName: Build Docker and Push
       steps:
       - script: |
           echo '##vso[task.setvariable variable=build-sha]'$(git rev-parse --short HEAD)''
           echo 'buildSha set to $(build-sha)'
-        displayName: Get build git sha
+        displayName: 'Git: get commit sha'
 
       - script: |
           docker build --tag $(snapshot-tag)-$(build-sha) .
           docker tag $(snapshot-tag)-$(build-sha) $(dev-tag)
-        displayName: 'Docker: Build and tag image'
+        displayName: 'Docker: build and tag image'
 
       - task: Docker@1 # Use the task to avoid embedding credentials in pipeline
         displayName: 'Docker: login ACR'
@@ -96,10 +96,10 @@ stages:
           azureContainerRegistry: $(newton-registry)
 
       - script: docker push $(snapshot-tag)-$(build-sha)
-        displayName: 'Docker: Push snapshot'
+        displayName: 'Docker: push snapshot'
 
       - script: docker push $(dev-tag)
-        displayName: 'Docker: Push dev'
+        displayName: 'Docker: push dev'
 
       - script: docker logout $(newton-registry)
         displayName: 'Docker: logout ACR'
