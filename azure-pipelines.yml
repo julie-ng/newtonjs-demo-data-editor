@@ -58,16 +58,12 @@ stages:
   displayName: 'Test (Node.js)'
   jobs:
     - job: Audit
-      pool:
-        vmImage: 'ubuntu-latest'
       steps:
       - script: npm audit
         displayName: Audit Dependencies
         continueOnError: true
 
     - job: Linter
-      pool:
-        vmImage: 'ubuntu-latest'
       steps:
       - script: npm ci && npm run lint
         displayName: Lint Code
