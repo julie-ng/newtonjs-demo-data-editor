@@ -51,7 +51,8 @@ const nodes = [
 
 	// { status: "up", id:"monitoring-service", label: "Monitoring Service" },
 	// { status: "up", id:"monitoring-db", label: "Monitoring DB" },
-	{ status: "up", id:"logging-service", label: "Logging Service" }
+	{ status: "up", id:"logging-service", label: "Logging Service" },
+	{ status: "up", id:"media-service", label: "Media Service" }
 ]
 
 // links by reference
@@ -65,14 +66,12 @@ const links = [
 	{ source: 'api-gateway', target: 'invoice-service' },
 	{ source: 'api-gateway', target: 'payment' },
 	{ source: 'api-gateway', target: 'old-monolith' },
-	{ source: 'api-gateway', target: 'invoice-service' },
 	{ source: 'api-gateway', target: 'media-service' },
 	{ source: 'api-gateway', target: 'upload-service' },
 	{ source: 'api-gateway', target: 'documents-service' },
 	{ source: 'api-gateway', target: 'video-service' },
 	{ source: 'documents-service', target: 'uploads-service' },
 
-	{ source: 'api-gateway', target: 'search-service' },
 	{ source: 'search-service', target: 'search-cache' },
 
 	{ source: 'old-monolith', target: 'invoice-service' },
@@ -91,7 +90,6 @@ const links = [
 	{ source: 'documents-service', target: 'documents-db' },
 	{ source: 'documents-service', target: 'uploads-service' },
 	{ source: 'documents-service', target: 'ocr-service' },
-	{ source: 'documents-service', target: 'documents-db' },
 	{ source: 'ocr-service', target: 'ocr-queue' },
 	{ source: 'transcription-service', target: 'transcription-queue' },
 
