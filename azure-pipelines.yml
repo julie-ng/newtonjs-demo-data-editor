@@ -79,6 +79,7 @@ stages:
   # Docker: Build and Push
   - stage: BuildAndDeploy
     displayName: "Build and Deploy"
+    condition: and(succeeded(), ne(variables['Build.Reason'], 'PullRequest'))
     jobs:
       - job: build_and_deploy
         displayName: Build Docker and Push
