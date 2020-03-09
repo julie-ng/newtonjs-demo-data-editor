@@ -4,9 +4,10 @@ name: $(BuildID)
 trigger:
   - master
   - feat/*
+  - release
 
 pool:
-  vmImage: "ubuntu-latest"
+  vmImage: 'ubuntu-latest'
 
 
 # Schedule
@@ -29,68 +30,107 @@ resources:
   repositories:
     - repository: templates
       type: github
-      name: julie-ng/newtonjs-azure-templates
+      name: julie-ng/azure-pipelines-templates
       endpoint: julie-ng # service connection
+      ref: refs/tags/v1.2.0
 
 
 # Variables
 # ---------
 
 variables:
-  # all variables prefixed `newton-` come from library
   - group: newton-common-vars
 
-  # this pipeline:
-  - name: image-namespace
-    value: demo
-
-  - name: image-name
+  - name: app-name
     value: data-editor
 
-  - name: docker-image
-    value: $(newton-registry)/$(newton-demo-namespace)/$(image-name)
+  - name: image-tag
+    value: 'dev'
 
-  - name: snapshot-tag
-    value: $(docker-image):$(Build.BuildId)
+  - name: image-name
+    value: $(lib-registry-namespace)/$(app-name)
 
-  - name: dev-tag
-    value: $(docker-image):dev
+  - name: image-name-with-registry
+    value: $(lib-registry-host)/$(image-name)
+
+  - name: is-dev
+    value: ${{ eq(variables['Build.SourceBranch'], 'refs/heads/master') }}
+
+  - name: is-release
+    value: ${{ and(eq(variables['Build.SourceBranch'], 'refs/heads/release'), ne(variables['Build.Reason'], 'Schedule')) }}
+
 
 # Stages
 # ------
 
 stages:
 
-  # Tests
+  # Stage 1 - Tests
   - stage: Tests
-    displayName: "Test (Node.js)"
+    displayName: "Tests (Node.js)"
     jobs:
-      - job: Audit
+      - job: AuditDependencies
         steps:
           - script: npm audit
-            displayName: Audit Dependencies
+            displayName: Audit (all)
             continueOnError: true
+
+          - script: npm audit --production
+            displayName: Audit (Prod only)
 
       - job: Linter
         steps:
           - script: npm ci && npm run lint
             displayName: Lint Code
 
-  # Docker: Build and Push
-  - stage: BuildAndDeploy
-    displayName: "Build and Deploy"
+  # Stage 2 - Docker: Build and Push
+  - stage: BuildIamge
+    displayName: "Build Image"
     condition: and(succeeded(), ne(variables['Build.Reason'], 'PullRequest'))
     jobs:
-      - job: build_and_deploy
+      - job: build_image
         displayName: Build Docker and Push
         steps:
-          - template: devops/steps-set-build-sha.yml@templates # sets `$(build-sha)`
-          - template: devops/steps-docker-build-push.yml@templates
+          - template: steps/set-custom-variable.yml@templates
             parameters:
-              devTag: $(dev-tag)
-              snapshotTag: $(snapshot-tag)-$(build-sha)
-          - template: devops/steps-deploy-app-service.yml@templates
+              condition: ${{ variables['is-release'] }}
+              variableName: image-tag
+              command: 'npm run --silent my-version'
+
+          - template: steps/docker-build-push.yml@templates
             parameters:
-              appName: $(pipeline-app-name)
-              dockerImage: $(snapshot-tag)-$(build-sha)
-              condition: always()
+              registryConnectionName: $(lib-acr-connection)
+              imageName: $(image-name)
+              tagsAsMultilineString: |
+                $(image-tag)
+              condition: ${{ or(variables['is-dev'], variables['is-release']) }}
+
+  # Stage 3 - Deploy
+  - stage: DeployContainer
+    displayName: "Deploy"
+    condition: and(succeeded(), ne(variables['Build.Reason'], 'PullRequest'))
+    jobs:
+    - job: deploy_master
+      displayName: 'Deploy (master)'
+      condition: ${{ variables['is-dev'] }}
+      steps:
+        - template: steps/deploy-app-service.yml@templates
+          parameters:
+            ARMConnectionName: $(lib-arm-connection)
+            dockerImage: $(image-name-with-registry):$(image-tag)
+            appName: $(app-name)-dev # with `-dev` suffix
+
+    - job: deploy_release
+      displayName: 'Deploy (release)'
+      condition: ${{ variables['is-release'] }}
+      steps:
+        - template: steps/set-custom-variable.yml@templates
+          parameters:
+            variableName: image-tag
+            command: 'npm run --silent my-version'
+
+        - template: steps/deploy-app-service.yml@templates
+          parameters:
+            ARMConnectionName: $(lib-arm-connection)
+            dockerImage: $(image-name-with-registry):$(image-tag)
+            appName: $(app-name)

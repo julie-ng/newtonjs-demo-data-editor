@@ -10,7 +10,8 @@
     "dev": "nodemon -w app --exec 'npm start'",
     "lint": "eslint .",
     "release": "standard-version",
-    "preflight": "npm audit && npm run lint"
+    "preflight": "npm audit && npm run lint",
+    "my-version": "node -e \"console.log(require('./package.json').version)\""
   },
   "dependencies": {
     "body-parser": "^1.19.0",
