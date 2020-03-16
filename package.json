@@ -9,7 +9,7 @@
     "start": "node app/app.js",
     "dev": "nodemon -w app --exec 'npm start'",
     "lint": "eslint .",
-    "release": "standard-version",
+    "release": "standard-version --sign",
     "preflight": "npm audit && npm run lint",
     "my-version": "node -e \"console.log(require('./package.json').version)\""
   },
