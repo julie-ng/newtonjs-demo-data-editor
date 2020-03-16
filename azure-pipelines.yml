@@ -67,9 +67,10 @@ stages:
 
   # Stage 1 - Tests
   - stage: Tests
-    displayName: "Tests (Node.js)"
+    displayName: "Tests (CI)"
     jobs:
-      - job: AuditDependencies
+      - job: audit
+        displayName: Audit Dependencies
         steps:
           - script: npm audit
             displayName: Audit (all)
@@ -78,18 +79,19 @@ stages:
           - script: npm audit --production
             displayName: Audit (Prod only)
 
-      - job: Linter
+      - job: lint
+        displayName: Lint Code
         steps:
           - script: npm ci && npm run lint
             displayName: Lint Code
 
   # Stage 2 - Docker: Build and Push
-  - stage: BuildIamge
-    displayName: "Build Image"
+  - stage: Build
+    displayName: Build
     condition: and(succeeded(), ne(variables['Build.Reason'], 'PullRequest'))
     jobs:
       - job: build_image
-        displayName: Build Docker and Push
+        displayName: Build Docker Image
         steps:
           - template: steps/set-custom-variable.yml@templates
             parameters:
@@ -106,8 +108,8 @@ stages:
               condition: ${{ or(variables['is-dev'], variables['is-release']) }}
 
   # Stage 3 - Deploy
-  - stage: DeployContainer
-    displayName: "Deploy"
+  - stage: Deploy
+    displayName: Deploy Container
     condition: and(succeeded(), ne(variables['Build.Reason'], 'PullRequest'))
     jobs:
     - job: deploy_master
