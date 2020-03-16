@@ -42,13 +42,13 @@ variables:
   - group: newton-common-vars
 
   - name: app-name
-    value: data-editor
+    value: newton-demo-data-editor
 
   - name: image-tag
     value: 'dev'
 
   - name: image-name
-    value: $(lib-registry-namespace)/$(app-name)
+    value: $(lib-registry-namespace)/data-editor
 
   - name: image-name-with-registry
     value: $(lib-registry-host)/$(image-name)
