@@ -48,10 +48,10 @@ variables:
     value: 'dev'
 
   - name: image-name
-    value: $(lib-registry-namespace)/data-editor
+    value: julieio/newtonjs-demo-editor
 
-  - name: image-name-with-registry
-    value: $(lib-registry-host)/$(image-name)
+  - name: registry-connection
+    value: docker-hub-julieio-connection
 
   - name: is-dev
     value: ${{ eq(variables['Build.SourceBranch'], 'refs/heads/master') }}
@@ -101,7 +101,7 @@ stages:
 
           - template: steps/docker-build-push.yml@templates
             parameters:
-              registryConnectionName: $(lib-acr-connection)
+              registryConnectionName: $(registry-connection)
               imageName: $(image-name)
               tagsAsMultilineString: |
                 $(image-tag)
@@ -119,7 +119,7 @@ stages:
         - template: steps/deploy-app-service.yml@templates
           parameters:
             ARMConnectionName: $(lib-arm-connection)
-            dockerImage: $(image-name-with-registry):$(image-tag)
+            dockerImage: $(image-name):$(image-tag)
             appName: $(app-name)-dev # with `-dev` suffix
 
     - job: deploy_release
@@ -134,5 +134,5 @@ stages:
         - template: steps/deploy-app-service.yml@templates
           parameters:
             ARMConnectionName: $(lib-arm-connection)
-            dockerImage: $(image-name-with-registry):$(image-tag)
+            dockerImage: $(image-name):$(image-tag)
             appName: $(app-name)
