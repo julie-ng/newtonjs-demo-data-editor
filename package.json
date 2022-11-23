@@ -20,7 +20,7 @@
     "hbs": "^4.1.1",
     "helmet": "^3.21.2",
     "morgan": "^1.9.1",
-    "socket.io": "^2.3.0"
+    "socket.io": "^2.5.0"
   },
   "devDependencies": {
     "eslint": "^6.8.0",
